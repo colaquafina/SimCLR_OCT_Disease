@@ -24,4 +24,4 @@ In deep learning, the model trained on data with label is supervised learning. H
 The SimCLR uses contrast learning to do the classification tasks. The contrast learning is based on the theory that the similar pictures would have shorter diatance between each other than other pictures. Therefore, in the model, it uses data augmentations to process the pictures into two versions, and then feed the pictures to the based model and a projection layer, and then minimize the distance between the two pictures.
 ![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/f4042d2e-c9a9-4e37-a065-e80207163a36)
 
-In this picture, $f(~)$ is the based model (ResNet is used in here), the $g(~)$ is the projection layer. By using the projection layers, the model performance could be much better.
+In this picture, $f(x)$ is the based model (ResNet is used in here), the $g(x)$ is the projection layer. By using the projection layers, the model performance could be much better.
