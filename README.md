@@ -17,3 +17,11 @@ In the functions $\xi$ is the loss function, $xl$ is the parameters of layers l,
 In the ResNet, there are two kinds of Resnet blocks, **Residual Block and Bottleneck Block**. For the former one, it has 2 3\*3 convolution layers with connections and for the last one, it has 1\*1, 3\*3 and 1\*1 convolution layers with connections. In different ResNet models, it would have differnet number of Resnet blocks and different kinds of Resnet blocks. For example, ResNet-34 has 34 Residual Blocks, and ResNet-50 has 50 Bottleneck Blocks.
 
 In this project, we build a **base_model** class (base_model.py) and use the **ResNet50V2** (retina_model.py) from tensorflow to instantiate the ResNet model. Also, you can use other versions of ResNet to build the model.
+
+## Unsupervised learning
+In deep learning, the model trained on data with label is supervised learning. However, it is hard to get a lot of labeled data for training, so we need unsupervised learning, which is training on unlabeled data. After that, the trained model can be used in the downstream tasked by using the labeled data to train the trained model. It can increase the accuracy. There are many methods, such as the model we used today, SimCLR.
+
+The SimCLR uses contrast learning to do the classification tasks. The contrast learning is based on the theory that the similar pictures would have shorter diatance between each other than other pictures. Therefore, in the model, it uses data augmentations to process the pictures into two versions, and then feed the pictures to the based model and a projection layer, and then minimize the distance between the two pictures.
+![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/f4042d2e-c9a9-4e37-a065-e80207163a36)
+
+In this picture, $f(~)$ is the based model (ResNet is used in here), the $g(~)$ is the projection layer. By using the projection layers, the model performance could be much better.
