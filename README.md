@@ -25,3 +25,10 @@ The SimCLR uses contrast learning to do the classification tasks. The contrast l
 ![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/f4042d2e-c9a9-4e37-a065-e80207163a36)
 
 In this picture, $f(·)$ is the based model (ResNet is used in here), the $g(·)$ is the projection layer. By using the projection layers, the model performance could be much better.
+
+## Data processing
+In this project, we use the OCT data from kaggle, which inlcudes the training and testing data. We use the **RetianDataset** class from `create_dataset.py` inherent from `tfds.core.GeneratorBasedBuilder`. This is a class for people to build tf dataset from different kinds of data. It has three functions. `_info()` defines the dataset information (`tfds.core.DatasetInfo`), including the dataset builder, driscription and data features. `_split_generators()` can download the data by using `dl_manager.download` and use the ` tfds.core.SplitGenerator` to split the data into training and testing data. `_generate_examples` can be used to yield examples into dataset. In this way, we build a dataset called RetinaDataset. 
+
+Then we need to preprocess the images (`data_process.py`). For the ResNet, the image processing can be used to increase the number of training images can increase the model generalizations. There are some basic image processing methods, including rotation, normalization and crop. However, for the SimCLR, the data augmentations is used to produce two versions of images. In the paper, it can crop, resize, rotate the images, and it would distort the color of the images and blur the images. Also it is proved that using the blur in preprocessing can improve the model performance.
+
+And then we load and process the dataset (`dataset_retina.py`)
