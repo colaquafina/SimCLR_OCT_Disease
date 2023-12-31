@@ -32,3 +32,6 @@ In this project, we use the OCT data from kaggle, which inlcudes the training an
 Then we need to preprocess the images (`data_process.py`). For the ResNet, the image processing can be used to increase the number of training images can increase the model generalizations. There are some basic image processing methods, including rotation, normalization and crop. However, for the SimCLR, the data augmentations is used to produce two versions of images. In the paper, it can crop, resize, rotate the images, and it would distort the color of the images and blur the images. Also it is proved that using the blur in preprocessing can improve the model performance.
 
 And then we load and process the dataset (`dataset_retina.py`)
+
+## ResNet Model
+Here, to make it convenient to use the ResNet model, we build a base model (`base_model.py`). Base model is a model container. We can put a ResNet50V2 (`retina_model.py`) in it and the dataset. Then we can use the model to train the data
