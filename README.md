@@ -34,4 +34,14 @@ Then we need to preprocess the images (`data_process.py`). For the ResNet, the i
 And then we load and process the dataset (`dataset_retina.py`)
 
 ## ResNet Model
-Here, to make it convenient to use the ResNet model, we build a base model (`base_model.py`). Base model is a model container. We can put a ResNet50V2 (`retina_model.py`) in it and the dataset. Then we can use the model to train the data
+Here, to make it convenient to use the ResNet model, we build a base model (`base_model.py`). Base model is a model container. We can put a ResNet50V2 (`retina_model.py`) in it and the dataset. Then we can use the model to train the data.
+
+## SimCLR Model.
+SimCLR is comsisted with a ResNet and a projections layer. However, with the development of the deep learning, there are many skills to improve the model performance, so it is more convenient to write the layers inherent from the tensorflow layers.
+
+In `layers.py`, it has (1) **BatchNormRelu**. It is consisted with a BatchNormalization layer and a Relu layer. Batch normalization is typically applied after the convolutional or fully connected layers and before the activation function. It can speed up the training process and smoothens the loss function. (2) **Conv2dFixedPadding**. It would pad the input at first and then pass it throught the Conv2D. (3) **IdentityLayer**. It returns the same output as the layer input. (4) **SE_Layer** (https://arxiv.org/abs/1709.01507). SE layers is called "Squeeze-and-Excitation block" (SE block). It incorporates the channel relationship of the data into training. For the SE block, the input ($H\times W\times C$) is *squeezed* by using a global averaging pooling to generate a channel-wise stastics ($1\times 1\times C$). In the *excitation*, it used to FC layers with activation function (relu and sigmoid seperately) to activate the channle-wise stastics. Finally, it multiplicates channel-wise with the input. SE block can be added after the Conv2D, and by stacking the SE blocks and Conv2D blocks, we can get SE Net. 
+![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/7013a425-8dd6-4883-8f27-c5da34c2bce1)
+
+![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/e7e4ce49-4841-455e-a3ef-c543e340094c)
+
+Therefore, from the **SE_Layer** in the `layers.py`, we can find that the input is averaged across the channels, and then after two convolution layers with activation layers, the short cut output times the input data and produce the output.
