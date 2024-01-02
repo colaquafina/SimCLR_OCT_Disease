@@ -38,7 +38,7 @@ Here, to make it convenient to use the ResNet model, we build a base model (`bas
 
 ## SimCLR Model.
 SimCLR is comsisted with a ResNet and a projections layer. However, with the development of the deep learning, there are many skills to improve the model performance, so it is more convenient to write the layers inherent from the tensorflow layers.
-
+### layers
 In `layers.py`, it has (1) **BatchNormRelu**. It is consisted with a BatchNormalization layer and a Relu layer. Batch normalization is typically applied after the convolutional or fully connected layers and before the activation function. It can speed up the training process and smoothens the loss function. (2) **Conv2dFixedPadding**. It would pad the input at first and then pass it throught the Conv2D. (3) **IdentityLayer**. It returns the same output as the layer input. (4) **SE_Layer** (https://arxiv.org/abs/1709.01507). SE layers is called "Squeeze-and-Excitation block" (SE block). It incorporates the channel relationship of the data into training. For the SE block, the input ($H\times W\times C$) is *squeezed* by using a global averaging pooling to generate a channel-wise stastics ($1\times 1\times C$). In the *excitation*, it used to FC layers with activation function (relu and sigmoid seperately) to activate the channle-wise stastics. Finally, it multiplicates channel-wise with the input. SE block can be added after the Conv2D, and by stacking the SE blocks and Conv2D blocks, we can get SE Net. 
 ![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/7013a425-8dd6-4883-8f27-c5da34c2bce1)
 
