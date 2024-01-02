@@ -27,7 +27,6 @@ class LinearLayer(tf.keras.layers.Layer):
             self.bn_relu = BatchNormRelu(relu=False, center=use_bias)
 
     def build(self, input_shape):
-        # TODO(srbs): Add a new SquareDense layer.
         if callable(self.num_classes):
             self.dense.units = self.num_classes(input_shape)
         super(LinearLayer, self).build(input_shape)
@@ -97,7 +96,7 @@ class ProjectionHead(tf.keras.layers.Layer):
         hiddens_list = [tf.identity(inputs, 'proj_head_input')]
         if self.proj_head_mode == 'linear':
             assert len(self.linear_layers) == 1, len(self.linear_layers)
-            return hiddens_list.append(self.linear_layers[0](hiddens_list[-1],
+            hiddens_list.append(self.linear_layers[0](hiddens_list[-1],
                                                              training))
         elif self.proj_head_mode == 'nonlinear':
             for j in range(self.num_proj_layers):
