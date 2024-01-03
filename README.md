@@ -52,3 +52,8 @@ The SK block can be divided into three steps, split, fuse and select. For the sp
 ![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/68333831-5ba2-40db-b64e-da3fe7e2994c)
 
 In the code, we use a kernel with size in $3 \times 3$ and twice filter to do the convolution, and then use `tf.split` to splite the output into two matrix (split). Then in the fusing part, we use  `Conv2D_0` and BathNormalizationRelu to produce matrix Z. Later, we use `conv2D_1` with twice filters and softmax operater to procduce the attention weights. 
+
+### Projection_layers
+In SimCLR, projection layers is a fully connected layer used to extrace and compress the output of the ResNet. It is proved that calculating the loss function based on the output of the projection layers can get better model performance.
+
+In `projection_layers.py`, the class `ProjectionHead` and `SupervisedHead` inherited from `tf.layers` are based on `LinearLayer` or nonlinear layers. The supervisedhead is used in to downstreat tasked with labeled data. For the `LinearLayer`, it is a fully connected layer (dense layer) with (or without) BatchNormalization layer and bias term. For the `ProjectionHead`, if it is linear, the projectionHead is a `LinearLayer` without bias term and with BatchNormalization. If it is nonlinear, then according to the number of projection layers $n$, we add $n-1$ `LinearLayers` with bias and BatchNormalizationRelu, and a `LinearLayer`. For the `SupervisedHead`, it is only a LinearLayer.
