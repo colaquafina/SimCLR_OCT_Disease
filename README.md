@@ -59,6 +59,14 @@ The SK block can be divided into three steps, split, fuse and select. For the sp
 
 In the code, we use a kernel with size in $3 \times 3$ and twice filter to do the convolution, and then use `tf.split` to splite the output into two matrix (split). Then in the fusing part, we use  `Conv2D_0` and BathNormalizationRelu to produce matrix Z. Later, we use `conv2D_1` with twice filters and softmax operater to procduce the attention weights. 
 
+### Resnet_block
+As we said before, the ResNet can be based on **Residual Blcok** and **Bottleneck block**. We write this two blocks in `resnet-block.py` and we change it a little bit to improve the model performance. In the Residual Block, we incorporate the `sk_ratio` and `se_ration` to determine if we need the SK blcok and SE block. Also, the `sk_ratio` is relevant about the use of ResNet-D (I dont know why). Insetad of using a short cut without changing input, it uses an average pool and a conv2d layer to process the input. In conclusion, the new **Residual Block** is shown below.
+![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/41a498e6-be18-4682-839e-c6a10bc4e9d7)
+
+For the Bottleneck block, we also have similar changes. It is shown below
+![image](https://github.com/colaquafina/ResNet_OCT_Disease/assets/86960905/ae01c7ea-133d-4f66-938c-b5cf028b4276)
+
+
 ### Projection_layers
 In SimCLR, projection layers is a fully connected layer used to extrace and compress the output of the ResNet. It is proved that calculating the loss function based on the output of the projection layers can get better model performance.
 
