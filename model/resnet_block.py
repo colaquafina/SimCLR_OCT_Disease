@@ -4,7 +4,6 @@ class ResidualBlock(tf.keras.layers.Layer):
     def __init__(self,
                  filters,
                  strides,
-                 use_projection=False,
                  data_format='channels_last',
                  sk_ratio=0.0,
                  se_ratio=0.0,
@@ -12,31 +11,30 @@ class ResidualBlock(tf.keras.layers.Layer):
         super(ResidualBlock, self).__init__(**kwargs)
         self.conv2d_bn_layers = []
         self.shortcut_layers = []
-        if use_projection:
-            if sk_ratio > 0:  # Use ResNet-D (https://arxiv.org/abs/1812.01187)
-                if strides > 1:
-                    self.shortcut_layers.append(FixedPadding(2, data_format))
-                self.shortcut_layers.append(
-                    tf.keras.layers.AveragePooling2D(
-                        pool_size=2,
-                        strides=strides,
-                        padding='SAME' if strides == 1 else 'VALID',
-                        data_format=data_format))
-                self.shortcut_layers.append(
-                    Conv2dFixedPadding(
-                        filters=filters,
-                        kernel_size=1,
-                        strides=1,
-                        data_format=data_format))
-            else:
-                self.shortcut_layers.append(
-                    Conv2dFixedPadding(
-                        filters=filters,
-                        kernel_size=1,
-                        strides=strides,
-                        data_format=data_format))
+        if sk_ratio > 0:  # Use ResNet-D (https://arxiv.org/abs/1812.01187)
+            if strides > 1:
+                self.shortcut_layers.append(FixedPadding(2, data_format))
             self.shortcut_layers.append(
-                BatchNormRelu(relu=False, data_format=data_format))
+                tf.keras.layers.AveragePooling2D(
+                    pool_size=2,
+                    strides=strides,
+                    padding='SAME' if strides == 1 else 'VALID',
+                    data_format=data_format))
+            self.shortcut_layers.append(
+                Conv2dFixedPadding(
+                    filters=filters,
+                    kernel_size=1,
+                    strides=1,
+                    data_format=data_format))
+        else:
+            self.shortcut_layers.append(
+                Conv2dFixedPadding(
+                    filters=filters,
+                    kernel_size=1,
+                    strides=strides,
+                    data_format=data_format))
+        self.shortcut_layers.append(
+            BatchNormRelu(relu=False, data_format=data_format))
         self.conv2d_bn_layers.append(
             Conv2dFixedPadding(
                 filters=filters,
@@ -75,39 +73,37 @@ class BottleneckBlock(tf.keras.layers.Layer):
     def __init__(self,
                  filters,
                  strides,
-                 use_projection=False,
                  data_format='channels_last',
                  sk_ratio=0.0,
                  se_ratio=0.0,
                  **kwargs):
         super(BottleneckBlock, self).__init__(**kwargs)
         self.projection_layers = []
-        if use_projection:
-            filters_out = 4 * filters
-            if sk_ratio > 0:  # Use ResNet-D (https://arxiv.org/abs/1812.01187)
-                if strides > 1:
-                    self.projection_layers.append(FixedPadding(2, data_format))
-                self.projection_layers.append(
-                    tf.keras.layers.AveragePooling2D(
-                        pool_size=2,
-                        strides=strides,
-                        padding='SAME' if strides == 1 else 'VALID',
-                        data_format=data_format))
-                self.projection_layers.append(
-                    Conv2dFixedPadding(
-                        filters=filters_out,
-                        kernel_size=1,
-                        strides=1,
-                        data_format=data_format))
-            else:
-                self.projection_layers.append(
-                    Conv2dFixedPadding(
-                        filters=filters_out,
-                        kernel_size=1,
-                        strides=strides,
-                        data_format=data_format))
+        filters_out = 4 * filters
+        if sk_ratio > 0:  # Use ResNet-D (https://arxiv.org/abs/1812.01187)
+            if strides > 1:
+                self.projection_layers.append(FixedPadding(2, data_format))
             self.projection_layers.append(
-                BatchNormRelu(relu=False, data_format=data_format))
+                tf.keras.layers.AveragePooling2D(
+                    pool_size=2,
+                    strides=strides,
+                    padding='SAME' if strides == 1 else 'VALID',
+                    data_format=data_format))
+            self.projection_layers.append(
+                Conv2dFixedPadding(
+                    filters=filters_out,
+                    kernel_size=1,
+                    strides=1,
+                    data_format=data_format))
+        else:
+            self.projection_layers.append(
+                Conv2dFixedPadding(
+                    filters=filters_out,
+                    kernel_size=1,
+                    strides=strides,
+                    data_format=data_format))
+        self.projection_layers.append(
+            BatchNormRelu(relu=False, data_format=data_format))
 
         self.conv_relu_dropblock_layers.append(
             Conv2dFixedPadding(
