@@ -95,8 +95,8 @@ class Resnet(tf.keras.Model):
         self.initial_conv_relu_max_pool.append(
             IdentityLayer(name='initial_conv', trainable=trainable))
         self.initial_conv_relu_max_pool.append(
-            BatchNormRelu(data_format=data_format, trainable=trainable))
-
+            tf.keras.layers.MaxPooling2D(pool_size=(3,3),strides=2)
+        )
         self.block_groups = []
         # the block groups is combined by residual of bottle neck blocks
         # It depends of the depth of the resnet model
