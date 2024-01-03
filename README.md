@@ -79,3 +79,5 @@ In `resnet`, we define the `block` and `layers` of different kinds of ResNet mod
 
 ### Learning rate
 Here, we use the **warm up** and **cosine decay** to schedule the learning rate. Warm up is a method to prevent from missing the optimized value. It is would increase the learning rate slowly from small to original learning in the beginning of the training (warm up steps). The cosine decay is a learning rate schedule that reduces the learning rate in a smooth and gradual manner 1. The learning rate is decreased following a cosine function, which starts at the initial learning rate and decays to a minimum value over a set number of epochs 2. The cosine decay is provided by tensorflow.
+
+Actually I did not run the model, cause I dont want to download the data and I dont have gpu to train the model, so this is mainly a *learning project* and it might have somthing wrong. For example, the ResNet-D proposed by paper is changing the downsampling block before the ResNet block, but in here it changes the short cut connection of the ResNet blocks. However, I do learn a lot from this project, thanks to the author.
